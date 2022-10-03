@@ -1,0 +1,115 @@
+form {
+  align-items: center;
+  text-align: -webkit-center;
+  justify-content: flex-start;
+  height: 30vh;
+  width: 100%;
+}
+
+.label {
+  color: white;
+}
+
+input {
+  border: 3px solid #ffffff30;
+  border-radius: 25px;
+  font-size: 4vh;
+  width: 30vw;
+}
+
+.passwordlabel {
+  margin-top: 10px;
+}
+
+.buttonsubmit {
+  margin-top: 10px;
+  display: inline-block; /* Change the display to block, for responsive reasons (see below) */
+  color: black; /* White text color */
+  text-align: center; /* Center the text */
+  padding: 14px 20px; /* Add some padding */
+  text-decoration: none; /* Remove underline */
+}
+
+.background {
+  width: 100vw;
+  height: 100vh;
+  text-align: -webkit-center;
+
+  background-image: url("../../assets/dysfunctionalFamily.jpg");
+  background-size: cover;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.formdiv {
+  width: fit-content;
+  background-color: #ffffff30;
+  padding-bottom: 40px;
+  display: inline-block;
+  box-shadow: 0px 0px 5px 8px #ffffff30;
+}
+.header {
+  padding:128px 16px;
+  font-family: "Lato", sans-serif;
+  text-align: center; /* center the text */
+  background: #787878; /* green background */
+  color: white; /* white text color */
+}
+
+/* Increase the font size of the <h1> element */
+.header h1 {
+  font-size: 40px;
+}
+.buttonGroup {
+  width: 100%;
+  text-align: right;
+  padding: 30px;
+}
+/* Style the top navigation bar */
+.navbar {
+  
+  overflow: hidden; /* Hide overflow */
+  background-color: #333; /* Dark background color */
+
+  img {
+    display: inline;
+    margin: auto;
+
+    //height: 3vw;
+  }
+}
+.a {
+  margin-top: 10px;
+  display: inline-block; /* Change the display to block, for responsive reasons (see below) */
+  color: black; /* White text color */
+  text-align: center; /* Center the text */
+  padding: 14px 20px; /* Add some padding */
+  text-decoration: none; /* Remove underline */
+  border: 3px solid green;
+}
+/* Style the navigation bar links */
+.navbar a {
+  float: left; /* Make sure that the links stay side-by-side */
+  display: block; /* Change the display to block, for responsive reasons (see below) */
+  color: white; /* White text color */
+  text-align: center; /* Center the text */
+  
+  text-decoration: none; /* Remove underline */
+  padding: 70px 0;
+  border: 3px solid green;
+}
+
+/* Right-aligned link */
+.navbar a.right {
+  float: right; /* Float a link to the right */
+}
+
+.navbar a.logo {
+  padding: 0;
+}
+
+/* Change color on hover/mouse-over */
+.navbar a:hover {
+  background-color: #ddd; /* Grey background color */
+  color: black; /* Black text color */
+}
