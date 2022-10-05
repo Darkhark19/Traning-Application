@@ -14,7 +14,7 @@
 }
 
 .label {
-  color: white;
+  color: black;
 }
 
 input {
@@ -30,18 +30,21 @@ input {
 
 .buttonsubmit {
   margin-top: 10px;
+  float : right;
+  margin: 5vw;
 }
-
+.btnHome {
+  float: left;
+  margin: 5vw;
+}
 .background {
   width: 100vw;
   height: 100vh;
   text-align: -webkit-center;
-
-  //background-image: url("../../assets/dysfunctionalFamily.jpg");
   background-size: cover;
   display: table-cell;
   vertical-align: middle;
-  background-color: black;
+  background-color: #ffffff30;
 }
 
 .formdiv {
@@ -55,5 +58,6 @@ input {
 .buttonGroup {
   width: 100%;
   text-align: right;
+  display: inline;
   padding: 30px;
 }

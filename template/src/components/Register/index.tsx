@@ -1,5 +1,4 @@
 import styles from "./styles.module.scss";
-import logo from "../../assets/Genealogika_logo.png";
 import Button from "react-bootstrap/button";
 import { api } from "../../services/api";
 import { useState, FormEvent } from "react";
@@ -31,7 +30,7 @@ export function Register() {
   return (
     <div className={styles.background}>
       <div className={styles.formdiv}>
-        <img src={logo} alt="Genealogika" className={styles.logo} />
+        <img alt="Genealogika" className={styles.logo} />
         <div>
           <form onSubmit={handleRegister} className={styles.container}>
             <div className={styles.label}>

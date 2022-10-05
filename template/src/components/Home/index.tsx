@@ -65,7 +65,7 @@ export function Home() {
       <h1 className="w3-margin w3-jumbo">Formação</h1>
 
       <a href="Login" className={styles.buttonsubmit}>Professor</a>
-      <a href="LoginAluno" className={styles.buttonsubmit}>Aluno</a>
+      <a href="LoginStudent" className={styles.buttonsubmit}>Aluno</a>
       </header>
     </body>
   );

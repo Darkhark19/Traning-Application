@@ -5,10 +5,10 @@ import styles from "./App.module.scss";
 import { Login } from "./components/Login";
 import { Register } from "./components/Register";
 import { Home } from "./components/Home";
-import { Forum } from "./components/Forum";
+import { Temas } from "./components/Temas";
 import { TreeHome } from "./components/Tree";
 import { TimeCapsule } from "./components/TimeCapsule";
-import { DnaAnalysis } from "./components/DnaAnalysis";
+import { LoginStudent } from "./components/LoginAluno";
 import { Help } from "./components/Help";
 
 export function App() {
@@ -18,12 +18,11 @@ export function App() {
         <main className={styles.contentWrapper}>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/forum" element={<Forum />} />
+            <Route path="/temas" element={<Temas />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/tree" element={<TreeHome />} />
-            <Route path="/timecapsule" element={<TimeCapsule />} />
-            <Route path="/dnaanalysis" element={<DnaAnalysis />} />
+            <Route path="/loginstudent" element={<LoginStudent />} />
             <Route path="/help" element={<Help />} />
           </Routes>
         </main>

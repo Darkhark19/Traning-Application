@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { GetTicketsBySubjectService } from "../services/GetTicketsBySubjectService";
+import { GetTicketsBySubjectService } from "../services/GetCoursesBySubjectService";
 
-class GetTicketsBySubjectController {
+class GetCoursesByNameController {
   async handle(req: Request, res: Response) {
     const { subject } = req.body;
     const service = new GetTicketsBySubjectService();
@@ -12,4 +12,4 @@ class GetTicketsBySubjectController {
   }
 }
 
-export { GetTicketsBySubjectController };
+export { GetCoursesByNameController };

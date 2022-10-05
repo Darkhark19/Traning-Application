@@ -1,6 +1,6 @@
 import styles from "./styles.module.scss";
 import logo from "../../assets/Genealogika_logo.png";
-import Button from "react-bootstrap/button";
+import {Button ,ButtonGroup} from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useState, FormEvent } from "react";
 import { api } from "../../services/api";
@@ -12,23 +12,22 @@ export function Login() {
     navigate("/register");
   };
 
-  const [email, setEmail] = useState("");
+  const [id, setId] = useState("");
   const [password, setPassword] = useState("");
-
+  function goHome() {
+    navigate("/");
+  }
   async function handleLogin(event: FormEvent) {
     event.preventDefault();
     await api.post(
-      "login",
+      "login",  
       {
-        email,
+        id,
         password,
       }
-      /*  {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      }*/
     );
-    navigate("/");
+    
+    navigate("/temas");
   };
 
   return (
@@ -42,14 +41,14 @@ export function Login() {
             onSubmit={handleLogin}
           >
             <div className={styles.label}>
-              Email
+              Identificador
               <br />
               <input
                 type="text"
-                id="email"
-                name="email"
-                onChange={(event) => setEmail(event.target.value)}
-                value={email}
+                id="id"
+                name="id"
+                onChange={(event) => setId(event.target.value)}
+                value={id}
                 className={styles.input}
               />
             </div>
@@ -66,25 +65,25 @@ export function Login() {
                 className={styles.input}
               />
             </div>
-            <div className={styles.buttonGroup}>
+            <ButtonGroup className="me-2" aria-label="First group">
               <Button
-                style={{ float: "left", paddingLeft: "0px" }}
+                variant="secondary"
                 type="button"
-                variant="link"
-                className={styles.buttonsubmit}
-                onClick={navigateRegister}
+                className = {styles.btnHome}
+                onClick={goHome}
               >
-                Don't have an account? Register.
+                Página Principal
               </Button>
-
               <Button
                 type="submit"
                 variant="success"
                 className={styles.buttonsubmit}
+                onClick = {handleLogin}
               >
                 Login
               </Button>
-            </div>
+              
+            </ButtonGroup>
           </form>
         </div>
       </div>

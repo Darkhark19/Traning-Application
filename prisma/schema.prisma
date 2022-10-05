@@ -14,41 +14,60 @@ model User {
   email    String @unique
   password String
 
-  @@map("users")
   Session Session[]
+
+  @@map("users")
 }
 
 model Student {
-  id         String   @id @default(uuid())
-  subject    String
-  content    String
-  created_at DateTime @default(now())
+  id       String @id @default(uuid())
+  name     String
+  password String
+  email    String @unique
+  class    String
 
+  StudentSession StudentSession[]
   @@map("students")
-  Session   Session? @relation(fields: [sessionId], references: [id])
-  sessionId String?
 }
 
 model Course {
+
   id      String @id @default(uuid())
   name    String
   subject String
 
 
-  @@map("courses")
   Session Session[]
+  @@map("courses")
+}
+
+model Token {
+  token      String   @id
+  user_id    String
+  created_at DateTime @default(now())
 }
 
 model Session {
-  id String @id @default(uuid())
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
 
+  coordinator   User   @relation(fields: [coordinatorId], references: [id])
+  coordinatorId String
+  course        Course @relation(fields: [courseId], references: [id])
+  courseId      String
 
-
-  coordinator User      @relation(fields: [userId], references: [id])
-  students    Student[]
-  course      Course    @relation(fields: [courseId], references: [id])
-
+  students StudentSession[]
   @@map("sessions")
-  userId   String
-  courseId String
+}
+
+model StudentSession {
+
+  ended_at DateTime
+
+  session   Session @relation(fields: [sessionId], references: [id])
+  sessionId String
+  student   Student @relation(fields: [studentId], references: [id])
+  studentId String
+  @@id([sessionId, studentId])
+  @@map("stsessions")
 }
