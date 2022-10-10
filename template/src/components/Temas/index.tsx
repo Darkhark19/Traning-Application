@@ -18,6 +18,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import { response } from "express";
 //import io from "socket.io-client";
 
 type Course = {
@@ -31,6 +32,12 @@ type Student = {
   name: String;
   enail: String;
   class: String;
+}
+
+type Session = {
+  id: String;
+  coordinatorId: String;
+  couserId: String;
 }
 
 //const socket = io("http://localhost:4000");
@@ -55,21 +62,32 @@ export function Temas() {
   const [subject, setSubject] = useState("");
   const [user, setUser] = useState("");
   const [firstRun, setFirstRun] = useState(true);
-  const [checked, setChecked] = useState([0]);
+  const [checkedStudents, setCheckedStudents] = useState([0]);
+  const [checkedCourse, setCheckedCourse] = useState(-1);
+  const [session,setSession] = useState<Session>();
 
-  const handleToggle = (value: number) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
+  const handleToggleStudents = (value: number) => () => {
+    const currentIndex = checkedStudents.indexOf(value);
+    const newChecked = [...checkedStudents];
     if (currentIndex === -1) {
       newChecked.push(value);
     } else {
       newChecked.splice(currentIndex, 1);
     }
-
-    setChecked(newChecked);
+    setCheckedStudents(newChecked);
   };
-
+  
+  const handleToggleCourses = (value: number) => () => {
+    
+    if(checkedCourse !== -1){
+      alert("Selecione apenas um curso.");
+    } else if(value == checkedCourse ){
+      setCheckedCourse(-1);
+    } else{
+      setCheckedCourse(value);
+    }
+  };
+  
   function getCourse() {
     api
       .get<Course[]>("courses")
@@ -83,6 +101,7 @@ export function Temas() {
         }
       });
   }
+  
   function getStudents() {
     api
       .get<Student[]>("students")
@@ -116,23 +135,30 @@ export function Temas() {
       /*await api.post("courses-by-subject", { subject }).then((response) => {
         setCourses(response.data);
       });*/
+
       return;
     }
   }
 
   async function handleSelection(event: FormEvent){
-    if(checked.length == 0){
-      handleOpen();
+    if(checkedStudents.length == 0){
+      alert("Selecione Algum aluno.")
     } else {
       getId();
-      await api.post("create-session" )
+     // await api.post("create-session",{user,});
     }
-
+    handleCloseStudent();
   }
   async function handleCourses(event: FormEvent) {
-    getId();
-    
-    
+    if(checkedCourse === -1){
+      alert("Selecione algum curso.")
+    }else{
+      getId();
+      var course = courses[checkedCourse].id;
+      await api.post("create-session",{user,course}).then((
+        response) => {setSession(response.data);
+        });
+    }
   }
  
 
@@ -147,9 +173,9 @@ export function Temas() {
           {courses.map((value,index) => {
             const labelId = "checkbox-list-label- { " + value.name + "}";
             return(
-              <ListItemButton role={undefined} onClick={handleToggle(index)} dense>
+              <ListItemButton role={undefined} onClick={handleToggleCourses(index)} dense>
                 <ListItemIcon>
-                  <Checkbox edge="start" checked={checked.indexOf(index) !== -1}
+                  <Checkbox edge="start" checked={checkedCourse === index}
                     tabIndex={-1} disableRipple inputProps={{ 'aria-labelledby': labelId }} />
                 </ListItemIcon>
                 <ListItemText id={labelId} primary={ value.name} />
@@ -175,9 +201,9 @@ export function Temas() {
           {students.map((value,index) => {
             const labelId = "checkbox-list-label- { " + value.name + "}";
             return(
-              <ListItemButton role={undefined} onClick={handleToggle(index)} dense>
+              <ListItemButton role={undefined} onClick={handleToggleStudents(index)} dense>
                 <ListItemIcon>
-                  <Checkbox edge="start" checked={checked.indexOf(index) !== -1}
+                  <Checkbox edge="start" checked={checkedStudents.indexOf(index) !== -1}
                     tabIndex={-1} disableRipple inputProps={{ 'aria-labelledby': labelId }} />
                 </ListItemIcon>
                 <ListItemText id={labelId} primary={ value.name} />

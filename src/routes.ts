@@ -10,6 +10,8 @@ import { RegisterController } from "./controllers/RegisterController";
 import { validateToken } from "./middleware/Authenticate";
 import { GetCoursesController } from "./controllers/GetCoursesController";
 import { GetStudentsController } from "./controllers/GetStudentsController";
+import { CreateSessionController } from "./controllers/CreateSessionController";
+import { CreateStudentSessioController } from "./controllers/CreateStudentSessionController";
 
 
 const router = Router();
@@ -23,11 +25,12 @@ router.post("/id-from-token", new GetUserIdFromTokenController().handle);
 
 
 router.post("/users", new GetUserController().handle);
-
+router.post("/create-session", new CreateSessionController().handle);
 
 router.get("/courses",new GetCoursesController().handle);
 router.get("/students",new GetStudentsController().handle);
 router.get("/validate-token", validateToken);
 
+router.post("/link-student-course", new CreateStudentSessioController().handle);
 
 export { router };

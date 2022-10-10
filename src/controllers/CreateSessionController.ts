@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { CreateSessionService } from "../services/CreateSessionService";
 
-class TicketCreateController {
+class CreateSessionController {
   async handle(req: Request, res: Response) {
     const { coordinatorId, courseId } = req.body;
 
@@ -13,4 +13,4 @@ class TicketCreateController {
   }
 }
 
-export { TicketCreateController };
+export { CreateSessionController };
