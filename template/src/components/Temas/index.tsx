@@ -22,7 +22,7 @@ import { response } from "express";
 //import io from "socket.io-client";
 
 type Course = {
-  id: string;
+  id: number;
   subject: string;
   name: string;
 };
@@ -35,7 +35,7 @@ type Student = {
 }
 
 type Session = {
-  id: String;
+  id: number;
   coordinatorId: String;
   couserId: String;
 }
@@ -55,8 +55,6 @@ export function Temas() {
   const [showStudents, setShowStudents] = useState(false);
   const handleOpenStudent = () => setShowStudents(true);
   const handleCloseStudent = () => setShowStudents(false);
-  const [newTicket, setNewTicket] = useState("");
-  const [content, setNewContent] = useState("");
   const [courses, setCourses] = useState<Course[]>([]);
   const [students, setStudents] = useState<Student[]>([]);
   const [subject, setSubject] = useState("");
@@ -144,10 +142,17 @@ export function Temas() {
     if(checkedStudents.length == 0){
       alert("Selecione Algum aluno.")
     } else {
-      getId();
+      //getId();
      // await api.post("create-session",{user,});
+      var sessionId = session.id;
+      for(var position of checkedStudents){
+        var studentId = students[position].id;
+        await api.post("link-student-course",{sessionId,studentId});
+      }
+      handleCloseStudent();
+      
     }
-    handleCloseStudent();
+    
   }
   async function handleCourses(event: FormEvent) {
     if(checkedCourse === -1){
@@ -155,10 +160,20 @@ export function Temas() {
     }else{
       getId();
       var course = courses[checkedCourse].id;
-      await api.post("create-session",{user,course}).then((
-        response) => {setSession(response.data);
-        });
+      await api.post("create-session",{
+        coordinatorId: user,
+        courseId: course
+        }).catch((error) => {
+          console.log(error.response.status);
+          if (error.response.status == 401) {
+            alert("Sem cookie");
+          }
+        }).then((response) => {setSession(response.data);
+      });
+      handleClose();
+      document.getElementById("curso").hidden = true;
     }
+    
   }
  
 
@@ -255,8 +270,8 @@ export function Temas() {
       
       <div >
       
-      <Button variant="secondary" onClick={handleOpen} >Cursos</Button>{' '}
-      <Button variant="secondary" onClick={handleOpenStudent}>Alunos</Button>{' '}
+      <Button variant="secondary" onClick={handleOpen} id="curso">Cursos</Button>{' '}
+      <Button variant="secondary" onClick={handleOpenStudent} id= "aluno">Alunos</Button>{' '}
       </div>
     </div>
   );

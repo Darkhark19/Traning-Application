@@ -44,8 +44,6 @@ CREATE TABLE "stsessions" (
     "ended_at" DATETIME NOT NULL,
     "sessionId" TEXT NOT NULL,
     "studentId" TEXT NOT NULL,
-
-    PRIMARY KEY ("sessionId", "studentId"),
     CONSTRAINT "stsessions_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "students" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "stsessions_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "sessions" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
@@ -55,3 +53,6 @@ CREATE UNIQUE INDEX "users_email_key" ON "users"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "students_email_key" ON "students"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "stsessions_sessionId_studentId_key" ON "stsessions"("sessionId", "studentId");

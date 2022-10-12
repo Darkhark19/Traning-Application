@@ -19,15 +19,21 @@ export function Login() {
   }
   async function handleLogin(event: FormEvent) {
     event.preventDefault();
-    await api.post(
+    const reponse = await api.post(
       "login",  
       {
         id,
         password,
       }
-    );
-    
-    navigate("/temas");
+    ).catch((error) => {
+      if(error.response.status == 401){
+        alert("Password ou id errados");
+      }else{
+        console.log(error.response);
+      }
+        
+    });
+    if(reponse) {navigate("/temas")};
   };
 
   return (

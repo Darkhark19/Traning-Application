@@ -52,7 +52,7 @@ model Session {
   created_at DateTime @default(now())
 
   coordinator   User   @relation(fields: [coordinatorId], references: [id])
-  coordinatorId String
+  coordinatorId String 
   course        Course @relation(fields: [courseId], references: [id])
   courseId      String
 
@@ -62,12 +62,14 @@ model Session {
 
 model StudentSession {
 
-  ended_at DateTime
+  id         String   @id @default(uuid())
+  ended_at DateTime   @updatedAt
 
   session   Session @relation(fields: [sessionId], references: [id])
   sessionId String
   student   Student @relation(fields: [studentId], references: [id])
   studentId String
-  @@id([sessionId, studentId])
+
+  @@unique([sessionId,studentId])
   @@map("stsessions")
 }
