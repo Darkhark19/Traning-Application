@@ -19,7 +19,7 @@ export function Login() {
   }
   async function handleLogin(event: FormEvent) {
     event.preventDefault();
-    const reponse = await api.post(
+    const response = await api.post(
       "login",  
       {
         id,
@@ -33,7 +33,7 @@ export function Login() {
       }
         
     });
-    if(reponse) {navigate("/temas")};
+    if(response) {navigate("/temas");}
   };
 
   return (

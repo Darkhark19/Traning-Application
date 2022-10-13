@@ -4,26 +4,50 @@ import styles from "./styles.module.scss";
 import logo from "../../assets/dnaanalysis.png";
 import { useNavigate } from "react-router-dom";
 import { useState ,FormEvent} from "react";
+import { Modal } from "react-bootstrap";
+import { Student, User } from "@prisma/client";
+
+type Course = {
+  id: string;
+  name: string;
+  subject: string;
+  password: string;
+};
+
+type StudentSession = {
+  id: string;
+  ended_at: Date;
+  content: string;
+  session: Session;
+  student: Student;
+};
+
+type Session ={
+  id: string;
+  created_at: Date;
+  coordinator: User;
+  course: Course;
+};
 
 export function LoginStudent() {
   const navigate = useNavigate();
+
+  const [student, setStudent] = useState("");
   const [temas, setTemas] = useState([]);
   const [show, setShow] = useState(false);
-
+  const handleOpen = () => setShow(true);
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const [stSessions,setStSessions] = useState<StudentSession[]>([]);
+  const [session,setSession] = useState<Session>();
+  const [course,setCourse] = useState<Course>();
+  const [ola,setOla] = useState<string>("");
+
+
   function goHome() {
     navigate("/");
   }
-  type Course = {
-    id: string;
-    name: string;
-    subject: string;
-    password: string;
-  };
-
   
 /*
   const subject = "DNA Analysis";
@@ -46,29 +70,47 @@ export function LoginStudent() {
       body,
     });
   }*/
-  async function handleLogin(event: FormEvent) {
-    event.preventDefault();
-    await api.post(
-      "aluno-login",
-      {
-        id,
-        password,
-      }
-      /*  {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      }*/
-    );
-    navigate("/temas");
-  };
-
-
-
-  return (
-
-      <div className={styles.background}>
+  async function getId() {
+    await api.post("id-from-token", {}).then((response) => {
+      setStudent(response.data.toString());
+      setOla(response.data);
+      console.log(response.data.toString());
+      console.log(student);
+    console.log(ola);
+    });
+  }
+    
+  async function getStSession(){
+    //navigate("/temas");
+    getId();
+    //while(stSessions.length == 0){
+      const stSessionResponse = await api.post("student-session",{student})
+      .then((response) => {setStSessions(response.data);});
+    //  }
+  }
   
+  
+  async function handleLogin(event: FormEvent) {
+      event.preventDefault();
+      const response = await api.post( "aluno-login", { id, password,}).
+        catch((error) => {
+          if(error.response.status == 401){
+            alert("Password ou id errados");
+          }else{
+            console.log(error.response);
+          }
+        });
+      if(response) {
+        handleOpen();
+        
+        getStSession();
+      }
       
+  }
+
+
+
+  return (  
       <div className={styles.formdiv}>
       <div>
           <form
@@ -115,6 +157,7 @@ export function LoginStudent() {
                 type="submit"
                 variant="success"
                 className={styles.btnHome}
+                
               >
                 Login
               </Button>
@@ -122,8 +165,10 @@ export function LoginStudent() {
             </ButtonGroup>
           </form>
         </div>
+        <Modal show={show} onHide={handleOpen} >
+        <Modal.Body >Waiting...</Modal.Body>
+        </Modal>
       </div>
-    </div>
   
   );
 }

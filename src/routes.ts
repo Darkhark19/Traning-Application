@@ -12,6 +12,7 @@ import { GetCoursesController } from "./controllers/GetCoursesController";
 import { GetStudentsController } from "./controllers/GetStudentsController";
 import { CreateSessionController } from "./controllers/CreateSessionController";
 import { CreateStudentSessioController } from "./controllers/CreateStudentSessionController";
+import { GetStudentSessionController } from "./controllers/GetStudentSessionController";
 
 
 const router = Router();
@@ -31,6 +32,7 @@ router.get("/courses",new GetCoursesController().handle);
 router.get("/students",new GetStudentsController().handle);
 router.get("/validate-token", validateToken);
 
+router.post("/student-session", new GetStudentSessionController().handle);
 router.post("/link-student-course", new CreateStudentSessioController().handle);
 
 export { router };

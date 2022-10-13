@@ -6,9 +6,9 @@ class CreateStudentSessionService {
     const ended_at = Date.now().toLocaleString();
     const studentSession = await prismaClient.studentSession.create({
       data: {
-        ended_at,
-        sessionId,
-        studentId,
+        content: "ola",
+        sessionId:sessionId,
+        studentId: studentId,
     },
       include:{
         session : true,

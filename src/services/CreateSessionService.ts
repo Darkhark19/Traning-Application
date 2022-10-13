@@ -3,21 +3,19 @@ import prismaClient from "../prisma";
 import { io } from "../app";
 
 class CreateSessionService {
-  async execute(coorId: string, cId: string) {
+  async execute(coordinatorId: string, cId: string) {
 
     const session = await prismaClient.session.create({
-      data: {
-          coordinatorId :  coorId,
-          courseId: cId,
-        
-    },
-      include:{
-        coordinator : true,
+      data:{
+        coordinatorId: coordinatorId,
+        courseId : cId,
+      },
+      include: {
+        coordinator: true,
         course: true,
       },
-    }).catch((error) => {console.log(error)});
+    });
     
-  
 
     return session;
   }

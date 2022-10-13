@@ -27,10 +27,10 @@ class LoginStudentController {
 
       const service = new CreateTokenService();
 
-      const result = await service.execute(accessToken, foundStudent.id);
-      console.log(result);
+      await service.execute(accessToken, foundStudent.id);
+
       res.cookie("accessToken", accessToken, {
-        maxAge: 48 * 60 * 60 * 1000,
+        maxAge: 24 * 60 * 60 * 1000,
       });
       res.json("Success");
     }

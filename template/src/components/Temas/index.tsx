@@ -60,7 +60,7 @@ export function Temas() {
   const [subject, setSubject] = useState("");
   const [user, setUser] = useState("");
   const [firstRun, setFirstRun] = useState(true);
-  const [checkedStudents, setCheckedStudents] = useState([0]);
+  const [checkedStudents, setCheckedStudents] = useState([]);
   const [checkedCourse, setCheckedCourse] = useState(-1);
   const [session,setSession] = useState<Session>();
 
@@ -137,7 +137,7 @@ export function Temas() {
       return;
     }
   }
-
+  getId();
   async function handleSelection(event: FormEvent){
     if(checkedStudents.length == 0){
       alert("Selecione Algum aluno.")
@@ -158,17 +158,17 @@ export function Temas() {
     if(checkedCourse === -1){
       alert("Selecione algum curso.")
     }else{
-      getId();
+      //getId();
       var course = courses[checkedCourse].id;
       await api.post("create-session",{
         coordinatorId: user,
         courseId: course
+        }).then((response) => {setSession(response.data)
         }).catch((error) => {
           console.log(error.response.status);
           if (error.response.status == 401) {
             alert("Sem cookie");
           }
-        }).then((response) => {setSession(response.data);
       });
       handleClose();
       document.getElementById("curso").hidden = true;
