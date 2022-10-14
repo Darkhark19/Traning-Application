@@ -29,10 +29,10 @@ model Session {
   id         String   @id @default(uuid())
   created_at DateTime @default(now())
 
-  coordinator   User?   @relation(fields: [coordinatorId], references: [id])
-  coordinatorId String?
-  course        Course? @relation(fields: [courseId], references: [id])
-  courseId      String?
+  coordinator   User   @relation(fields: [coordinatorId], references: [id])
+  coordinatorId String
+  course        Course @relation(fields: [courseId], references: [id])
+  courseId      String
 
   students StudentSession[]
   @@map("sessions")
@@ -45,7 +45,7 @@ model Student {
   email    String @unique
   class    String
 
-  StudentSession StudentSession[]
+  studentSession StudentSession[]
   @@map("students")
 }
 
@@ -55,19 +55,19 @@ model Course {
   name    String
   subject String
 
-  Session Session[]
+  session Session[]
   @@map("courses")
 }
 
 model StudentSession {
 
-  id       String   @id @default(uuid())
-  ended_at DateTime @updatedAt
-  content  String
-  Session   Session? @relation(fields: [sessionId], references: [id])
-  sessionId String?
-  Student   Student? @relation(fields: [studentId], references: [id])
-  studentId String?
+  id        String   @id @default(uuid())
+  ended_at  DateTime @updatedAt
+  content   String
+  session   Session  @relation(fields: [sessionId], references: [id])
+  sessionId String
+  student   Student  @relation(fields: [studentId], references: [id])
+  studentId String
   @@unique([sessionId, studentId])
   @@map("stsessions")
 }

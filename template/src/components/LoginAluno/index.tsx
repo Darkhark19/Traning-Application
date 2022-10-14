@@ -29,10 +29,19 @@ type Session ={
   course: Course;
 };
 
+type Student = {
+  id: string;
+  name: string;
+  password: string;
+  email: string;
+  class: string;
+}
+
 export function LoginStudent() {
   const navigate = useNavigate();
 
-  const [student, setStudent] = useState("");
+  const [student, setStudent] = useState<Student>();
+  const [studentId, setStudentId] = useState("");
   const [temas, setTemas] = useState([]);
   const [show, setShow] = useState(false);
   const handleOpen = () => setShow(true);
@@ -42,7 +51,6 @@ export function LoginStudent() {
   const [stSessions,setStSessions] = useState<StudentSession[]>([]);
   const [session,setSession] = useState<Session>();
   const [course,setCourse] = useState<Course>();
-  const [ola,setOla] = useState<string>("");
 
 
   function goHome() {
@@ -72,37 +80,45 @@ export function LoginStudent() {
   }*/
   async function getId() {
     await api.post("id-from-token", {}).then((response) => {
-      setStudent(response.data.toString());
-      setOla(response.data);
-      console.log(response.data.toString());
-      console.log(student);
-    console.log(ola);
+      setStudentId(response.data);
+      //nao funciona
     });
   }
     
   async function getStSession(){
     //navigate("/temas");
-    getId();
+    //getId();
+    
     //while(stSessions.length == 0){
-      const stSessionResponse = await api.post("student-session",{student})
-      .then((response) => {setStSessions(response.data);});
-    //  }
+    const id = student.id;
+    while(stSessions.length  == 0){
+      await api.post<StudentSession[]>("student-session",{id})
+        .then((response) => {
+          setStSessions(response.data);
+          console.log(response.data);
+        });
+        
+    }
+    
+    navigate("/");
   }
   
   
   async function handleLogin(event: FormEvent) {
       event.preventDefault();
-      const response = await api.post( "aluno-login", { id, password,}).
-        catch((error) => {
+      await api.post( "aluno-login", { 
+          id, 
+          password
+        }).then((response) => {setStudent(response.data);
+        }).catch((error) => {
           if(error.response.status == 401){
             alert("Password ou id errados");
           }else{
             console.log(error.response);
           }
         });
-      if(response) {
-        handleOpen();
-        
+      if(student) {
+        handleOpen(); 
         getStSession();
       }
       

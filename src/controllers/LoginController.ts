@@ -29,7 +29,6 @@ class LoginController {
       await deleteService.execute(accessToken);
       const service = new CreateTokenService();
       const result = await service.execute(accessToken, foundUser.id);
-      console.log(result);
         
       res.cookie("accessToken", accessToken, {
         maxAge: 48 * 60 * 60 * 1000,

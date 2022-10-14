@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { LoginStudentService } from "../services/LoginStudentService";
 import { CreateTokenService } from "../services/CreateTokenService";
 import jwt from "jsonwebtoken";
+import { DeleteTokenService } from "../services/DeleteTokenService";
 
 
 const ACCESS_TOKEN_SECRET = "3be17c7406dc4904c247ab8d78d11c05";
@@ -25,14 +26,15 @@ class LoginStudentController {
         ACCESS_TOKEN_SECRET
       );
 
+      const deleteService = new DeleteTokenService();
+      await deleteService.execute(accessToken);
       const service = new CreateTokenService();
-
-      await service.execute(accessToken, foundStudent.id);
-
+      const result = await service.execute(accessToken, foundStudent.id);
+      
       res.cookie("accessToken", accessToken, {
         maxAge: 24 * 60 * 60 * 1000,
       });
-      res.json("Success");
+      res.json(foundStudent);
     }
   }
 }

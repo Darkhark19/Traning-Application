@@ -15,12 +15,13 @@ class GetStudentSessionService {
                 studentId: {
                     equals: studentId,
                 },
-                session: {
-                    created_at: {
-                        gte: new Date().toISOString(),
-                    }
-                }
+                
+            },
+            include:{
+                session: true,
+                student: true,
             }
+            
         });
         return stSessions;
     }
