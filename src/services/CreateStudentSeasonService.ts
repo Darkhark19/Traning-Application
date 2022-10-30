@@ -3,7 +3,7 @@ import prismaClient from "../prisma";
 
 class CreateStudentSessionService {
   async execute(sessionId: string, studentId: string) {
-    const studentSession = await prismaClient.studentSession.create({
+    /*const studentSession = await prismaClient.studentSession.create({
       data: {
         content: "ola",
         sessionId,
@@ -12,7 +12,7 @@ class CreateStudentSessionService {
       
     });
 
-    return studentSession;
+    return studentSession;*/
   }
 }
 

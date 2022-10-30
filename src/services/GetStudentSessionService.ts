@@ -4,7 +4,7 @@ import prismaClient from "../prisma";
 
 class GetStudentSessionService {
     async execute(studentId: string) {
-        const stSessions = await prismaClient.studentSession.findMany({ 
+       /* const stSessions = await prismaClient.studentSession.findMany({ 
             take: 10,
             orderBy:{
                 session: {
@@ -23,7 +23,7 @@ class GetStudentSessionService {
             }
             
         });
-        return stSessions;
+        return stSessions;*/
     }
   }
   

@@ -1,0 +1,62 @@
+.logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 50vh;
+}
+
+form {
+  align-items: center;
+  text-align: -webkit-center;
+  justify-content: flex-start;
+  height: 30vh;
+  width: 100%;
+}
+
+.label {
+  color: black;
+}
+
+.input {
+  border: 3px solid #7fb142;
+  border-radius: 10px;
+  font-size: 2vh;
+  width: 30vw;
+  height: 6vh;
+}
+
+.passwordlabel {
+  margin-top: 10px;
+}
+
+.buttonsubmit {
+  margin-top: 10px;
+}
+
+.background {
+  width: 100vw;
+  height: 100vh;
+
+  text-align: -webkit-center;
+
+  //background-image: url("../../assets/dysfunctionalFamily.jpg");
+  background-size: cover;
+  display: table-cell;
+  vertical-align: middle;
+  overflow: auto;
+}
+
+.formdiv {
+  width: fit-content;
+  background-color: #ffffff30;
+  padding-bottom: 290px;
+  margin: 5vh;
+  display: inline-block;
+  box-shadow: 0px 0px 5px 8px #ffffff30;
+}
+
+.buttonGroup {
+  width: 100%;
+  text-align: right;
+  padding: 30px;
+}

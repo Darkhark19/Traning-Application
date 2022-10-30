@@ -8,9 +8,6 @@ import { api } from "../../services/api";
 export function Login() {
   const navigate = useNavigate();
 
-  const navigateRegister = () => {
-    navigate("/register");
-  };
 
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
@@ -33,7 +30,7 @@ export function Login() {
       }
         
     });
-    if(response) {navigate("/temas");}
+    if(response) {navigate("/lobby");}
   };
 
   return (

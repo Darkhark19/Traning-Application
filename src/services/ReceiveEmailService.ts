@@ -1,7 +1,7 @@
 import nodemailer from "nodemailer";
 
 class ReceiveEmailService {
-  execute(subject: string, body: string) {
+  execute(subject: string, body: string, email: string) {
     const transporter = nodemailer.createTransport({
       host: "smtp.sapo.pt",
       port: "465",

@@ -21,15 +21,14 @@ class LoginController {
     if (!foundUser) return res.sendStatus(401); //Unauthorized;
     else {
       //JWT
+      res.clearCookie("accessToken");
       const accessToken = jwt.sign(
         { email: foundUser.email, id: foundUser.id },
-        ACCESS_TOKEN_SECRET
+        ACCESS_TOKEN_SECRET,
       );
-      const deleteService = new DeleteTokenService();
-      await deleteService.execute(accessToken);
       const service = new CreateTokenService();
       const result = await service.execute(accessToken, foundUser.id);
-        
+      
       res.cookie("accessToken", accessToken, {
         maxAge: 48 * 60 * 60 * 1000,
       });

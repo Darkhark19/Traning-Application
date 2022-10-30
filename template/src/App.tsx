@@ -5,11 +5,12 @@ import styles from "./App.module.scss";
 import { Login } from "./components/Login";
 import { Register } from "./components/Register";
 import { Home } from "./components/Home";
-import { Temas } from "./components/Temas";
+import { Lobby } from "./components/Lobby";
 import { TreeHome } from "./components/Tree";
-import { TimeCapsule } from "./components/TimeCapsule";
+import { Module } from "./components/Module";
 import { LoginStudent } from "./components/LoginAluno";
-import { Help } from "./components/Help";
+import { Course } from "./components/Course";
+import { Students } from "./components/Students";
 
 export function App() {
   return (
@@ -18,12 +19,11 @@ export function App() {
         <main className={styles.contentWrapper}>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/temas" element={<Temas />} />
+            <Route path="/lobby" element={<Lobby />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/tree" element={<TreeHome />} />
             <Route path="/loginstudent" element={<LoginStudent />} />
-            <Route path="/help" element={<Help />} />
+            <Route path="/course" element={<Course />} />
+            <Route path="/createstudent" element={<Students />} />
           </Routes>
         </main>
       </div>
