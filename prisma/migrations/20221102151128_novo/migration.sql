@@ -20,9 +20,7 @@ CREATE TABLE "students" (
     "name" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "class" TEXT NOT NULL,
-    "courseId" TEXT,
-    CONSTRAINT "students_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+    "class" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -31,8 +29,17 @@ CREATE TABLE "courses" (
     "name" TEXT NOT NULL,
     "subject" TEXT NOT NULL,
     "ownerId" TEXT NOT NULL,
-    
     CONSTRAINT "courses_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "stcourses" (
+    "studentId" TEXT NOT NULL,
+    "courseId" TEXT NOT NULL,
+
+    PRIMARY KEY ("studentId", "courseId"),
+    CONSTRAINT "stcourses_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "students" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "stcourses_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "courses" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateTable
@@ -59,8 +66,10 @@ CREATE TABLE "sessions" (
 -- CreateTable
 CREATE TABLE "ssModules" (
     "sessionId" TEXT NOT NULL,
-    "moduleId" TEXT NOT NULL PRIMARY KEY,
+    "moduleId" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
+
+    PRIMARY KEY ("moduleId", "sessionId", "courseId"),
     CONSTRAINT "ssModules_courseId_moduleId_fkey" FOREIGN KEY ("courseId", "moduleId") REFERENCES "modules" ("courseId", "id") ON DELETE RESTRICT ON UPDATE CASCADE,
     CONSTRAINT "ssModules_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "sessions" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );

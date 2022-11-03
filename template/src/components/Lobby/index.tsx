@@ -31,16 +31,16 @@ type Course = {
   ownerId: String;
 };
 
-type User = {
-  id: String;
-  name: String;
-  email: String;
-}
 type Student = {
   id: String;
   name: String;
   enail: String;
   class: String;
+}
+
+type StudentCourse= {
+  courseId: String;
+  studentId: String;
 }
 
 type Session = {
@@ -60,6 +60,7 @@ type SessionsModules = {
   courseId: String;
 }
 
+
 //const socket = io("http://localhost:4000");
 
 //socket.on("new_ticket", (newTicket) => {
@@ -70,7 +71,7 @@ export function Lobby() {
   const navigate = useNavigate();
   const navigateToCourse = () => {navigate("/course")};
   const navigateToStudents = () => {navigate("/createstudent")};
-
+  const navigateToLobby = () => {navigate("/lobby")};
   const [user, setUser] = useState("");
   const [firstRun, setFirstRun] = useState(true);
   const [subject, setSubject] = useState("");
@@ -83,7 +84,9 @@ export function Lobby() {
   const handleClose = () => setShow(false);
 
   const [students, setStudents] = useState<Student[]>([]);
-  const [checkedStudents, setCheckedStudents] = useState([]);
+
+  const [stCourse, setStCourse] = useState<Student[]>([]);
+  const [checkedStCourse, setCheckedStCourse] = useState([]);
   const [showStudents, setShowStudents] = useState(false);
   const handleOpenStudent = () => setShowStudents(true);
   const handleCloseStudent = () => setShowStudents(false);
@@ -99,17 +102,16 @@ export function Lobby() {
   const [moduleTitle, setModuleTitle] = useState("");
 
   const [sessions,setSessions] = useState<Session[]>([]);
-  
 
   const handleToggleStudents = (value: number) => () => {
-    const currentIndex = checkedStudents.indexOf(value);
-    const newChecked = [...checkedStudents];
+    const currentIndex = checkedStCourse.indexOf(value);
+    const newChecked = [...checkedStCourse];
     if (currentIndex === -1) {
       newChecked.push(value);
     } else {
       newChecked.splice(currentIndex, 1);
     }
-    setCheckedStudents(newChecked);
+    setCheckedStCourse(newChecked);
   };
   
   const handleToggleCourses = (value: number) => () => {
@@ -170,19 +172,55 @@ export function Lobby() {
     handleModulesOpen();
   }
 
-  function getStudentsCourse(){
-    api.post<Student[]>("studentsCourse").then((response) => {
+  async function getStudents(){
+    await api
+    .get<Student[]>("students")
+    .then((response) => {
       setStudents(response.data);
+    })
+    .catch((error) => {
+      console.log(error.response.status);
+      if (error.response.status == 401) {
+        alert("Sem cookie");
+      }
+    });
+   
+  }
+
+  async function getStudentsCourse(){
+    var courseId = courses[checkedCourse].id;
+    getStudents();
+    await api.post<StudentCourse[]>("studentsCourse",{courseId}).then((response) => {
+      var studentsCourse:StudentCourse[] =  response.data;
+      var moduloSt : Student[] = [];
+      for(var st of studentsCourse){
+        var student = findStudentsById(st.studentId);
+        moduloSt.push(student);
+      }
+      setStCourse(moduloSt);
+      
     }).catch((error) => {
       console.log(error.response.status);
       if (error.response.status == 401) {
         alert("Sem cookie");
       }
     });
+
   }
+
+  function findStudentsById(id: String){
+    for(var student of students){
+      if(student.id == id){
+        return student;
+      }
+    }
+
+  }
+ 
+
   if (firstRun) {
     getCourse();
-   // getStudents();
+    getStudents();
     setFirstRun(false);
   }
 
@@ -206,10 +244,10 @@ export function Lobby() {
   getId();
 
   async function handleSelection(event: FormEvent){
-    if(checkedStudents.length == 0){
+    if(checkedStCourse.length == 0){
       alert("Selecione Algum aluno.")
     } else {
-      for(var position of checkedStudents){
+      for(var position of checkedStCourse){
         var studentId = students[position].id;
         await api.post<Session>("create-session",{
           coordinatorId: user,
@@ -221,9 +259,7 @@ export function Lobby() {
               alert("Sem cookie");
             }
         });
-        
-        
-        
+
       }  
     for(var position of checkedModules){
         for(var sessionPosition of sessions){
@@ -243,6 +279,7 @@ export function Lobby() {
         }
       }
       handleCloseStudent();
+      navigateToLobby();
     }
   }
 
@@ -261,7 +298,8 @@ export function Lobby() {
 
   async function handleModuloCreation(event: FormEvent) {
     var course = courses[checkedCourse].id;
-    await api.post("create-modules",{
+    
+    await api.post("create-module",{
       moduleTitle,
       course
     }).catch((error) => {
@@ -294,12 +332,12 @@ export function Lobby() {
         </Modal.Header>
         <Modal.Body>
         <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-          {students.map((value,index) => {
+        {stCourse.map((value,index) => {
             const labelId = "checkbox-list-label- { " + value.name + "}";
             return(
               <ListItemButton role={undefined} onClick={handleToggleStudents(index)} dense>
                 <ListItemIcon>
-                  <Checkbox edge="start" checked={checkedStudents.indexOf(index) !== -1}
+                  <Checkbox edge="start" checked={checkedStCourse.indexOf(index) !== -1}
                     tabIndex={-1} disableRipple inputProps={{ 'aria-labelledby': labelId }} />
                 </ListItemIcon>
                 <ListItemText id={labelId} primary={ value.name} />
@@ -402,7 +440,7 @@ export function Lobby() {
           <Button variant="secondary" onClick={handleModulesClose} >Cancelar</Button>
           <Button variant="primary" onClick={handleModule} type="submit">Submeter</Button>
         </Modal.Footer>
-      </Modal>
+      </Modal> 
       <Offcanvas show={showModulesCreation} onHide={handleModulesCreationOpen}>
         <Offcanvas.Header>
           <Offcanvas.Title>Criar Módulo</Offcanvas.Title>

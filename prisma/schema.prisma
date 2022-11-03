@@ -34,9 +34,9 @@ model Student {
   password String
   email    String @unique
   class    String
-  course   Course?   @relation(fields: [courseId], references: [id])
-  courseId String?
-  
+
+
+  stCourse StudentCourse[]
   Session  Session[]
   @@map("students")
 }
@@ -47,19 +47,29 @@ model Course {
   name    String
   subject String
 
-  owner    User      @relation(fields: [ownerId], references: [id])
-  ownerId  String
+  owner   User   @relation(fields: [ownerId], references: [id])
+  ownerId String
 
   modelus  Module[]
-  students Student[]
-
+  stCourse StudentCourse[]
   @@map("courses")
+}
+
+model StudentCourse {
+
+  Student   Student @relation(fields: [studentId], references: [id])
+  studentId String
+  Course    Course  @relation(fields: [courseId], references: [id])
+  courseId  String
+
+  @@id([studentId, courseId], name: "id")
+  @@map("stcourses")
 }
 
 model Module {
 
   id        String            @default(uuid())
-  content    String
+  content   String
   course    Course            @relation(fields: [courseId], references: [id])
   courseId  String
   stModules SessionsModules[]
@@ -71,7 +81,7 @@ model Module {
 model Session {
   id            String            @id @default(uuid())
   created_at    DateTime          @default(now())
-  ended_at      DateTime          @updatedAt()
+  ended_at      DateTime          
   coordinator   User              @relation(fields: [coordinatorId], references: [id])
   coordinatorId String
   students      Student           @relation(fields: [studentId], references: [id])
@@ -89,6 +99,6 @@ model SessionsModules {
   moduleId  String
   courseId  String
 
-  @@id([moduleId], name: "id")
+  @@id([moduleId, sessionId, courseId], name: "idSsModule")
   @@map("ssModules")
 }

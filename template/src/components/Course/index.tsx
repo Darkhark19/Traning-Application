@@ -27,7 +27,7 @@ type User = {
 type Student = {
   id: String;
   name: String;
-  enail: String;
+  email: String;
   class: String;
 }
 
@@ -37,11 +37,11 @@ export function Course() {
   const [students, setStudents] = useState<Student[]>([]);
   const [checkedStudents, setCheckedStudents] = useState([]);
 
-  const navigateTemas = () => {navigate("/temas");};
+  const navigateLobby = () => {navigate("/lobby");};
   const [title, setTitle] = useState("");
   const [subject, setSubject] = useState("");
   const [user,setUser] = useState<User>();
-  const [course,setCourse] = useState<Course>();
+  const [course,setCourse] = useState<Course>({id:"",subject:"",name:"",ownerId:""});
   
 
   const handleToggleStudents = (value: number) => () => {
@@ -97,12 +97,20 @@ export function Course() {
     setUser(response.data);
     var input = {title,subject,id};
     await api.post<Course>("create-course", input)
-    .then((response) => {setCourse(response.data)})
-    .catch((response) => console.log(response));
+    .then((response) => {
+      setCourse(response.data);
+      handleNewStudentCourse();
+    })
     
-    var idCourse = course.id;
-    await api.post("update-course",{idCourse,checkedStudents})
-    navigateTemas();
+  }
+
+  async function handleNewStudentCourse(){
+    var courseId = course.id;
+    for( var index of checkedStudents){
+      var studentId = students[index].id;
+      await api.post("create-courseStudent",{courseId,studentId});
+    }
+    navigateLobby();
   }
 
   return (
@@ -154,7 +162,7 @@ export function Course() {
         <Button
           variant="secondary"
           type="button"
-          onClick={navigateTemas}
+          onClick={navigateLobby}
           className={styles.formButton}
         >
           Close

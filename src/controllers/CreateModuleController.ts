@@ -4,7 +4,7 @@ import { CreateModuleService } from "../services/CreateModuleService";
 class CreateModuleController {
   async handle(req: Request, res: Response) {
     const { moduleTitle,  course } = req.body;
-    
+  
     const service = new CreateModuleService();
  
     const result = await service.execute( moduleTitle, course);

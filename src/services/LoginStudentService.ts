@@ -9,8 +9,6 @@ class LoginStudentService {
         password : password
       },
     });
-    console.log(student)
-    console.log("login serivce")
     return student;
   }
 }

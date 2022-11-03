@@ -20,8 +20,7 @@ class CreateStudentController {
       const service = new CreateStudentService();
 
       const result = await service.execute(name, email,classNumber);
-
-      res.json({ success: `New student with email ${email} created!` });
+      res.json(result);
     } catch (err) {
       res.status(500).json({ message: err.message });
     }

@@ -2,17 +2,15 @@ import prismaClient from "../prisma";
 
 class GetStudentsByCourseService {
   async execute(course: string) {
-    const user = await prismaClient.student.findMany({
+
+    
+    const stCourse = await prismaClient.studentCourse.findMany({
         where:{
-            courseId: course,
-        },
-        orderBy: {
-            name: "desc",
+          courseId: course
         }
         
     });
-
-    return user;
+    return stCourse;
   }
 }
 

@@ -5,30 +5,41 @@ import logo from "../../assets/dnaanalysis.png";
 import { useNavigate } from "react-router-dom";
 import { useState ,FormEvent} from "react";
 import { Modal,ListGroup } from "react-bootstrap";
-import { Student, User } from "@prisma/client";
 
 type Course = {
   id: string;
   name: string;
   subject: string;
-  password: string;
+  ownerId: String;
 };
-
+type User = {
+  id: String;
+  name: String;
+  email: String;
+}
 type StudentSession = {
   id: string;
   ended_at: Date;
   content: string;
   session: Session;
-  student: StudentType;
+  student: Student;
 };
 
 type Session ={
   id: string;
   created_at: Date;
+  ended_at: Date;
   coordinator: User;
+
 };
 
-type StudentType= {
+type Module = {
+  id: String;
+  content: String;
+  courseId: String;
+}
+
+type Student= {
   id: string;
   name: string;
   password: string;
@@ -36,24 +47,26 @@ type StudentType= {
   class: string;
 }
 
-type StudentModules = {
-
+type SessionsModules = {
+  sessionId: String;
+  session: Session;
+  module: Module;
+  moduleId: String;
   
 }
 export function LoginStudent() {
   const navigate = useNavigate();
 
-  const [student, setStudent] = useState<StudentType>();
-  const [studentId, setStudentId] = useState("");
+  const [student, setStudent] = useState<Student>();
+ 
   const [temas, setTemas] = useState([]);
   const [show, setShow] = useState(false);
   const handleOpen = () => setShow(true);
   const handleClose = () => setShow(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [stSessions,setStSessions] = useState<StudentSession[]>([]);
-  const [session,setSession] = useState<Session>();
-  const [course,setCourse] = useState<Course>();
+  const [sessionsModules,setSessionsModules] = useState<SessionsModules[]>([]);
+ 
 
 
   function goHome() {
@@ -91,36 +104,28 @@ export function LoginStudent() {
     });
   }*/
     
-  function getStSession(){
-    //navigate("/temas");
-    //getId();
-    
-    //while(stSessions.length == 0){
+  async function getStSession(id:String){
     var r = null;
-    const id = student.id;
-   // while(r == null){
-    api.post<StudentSession[]>("student-session",{id})
+    await api.post<SessionsModules[]>("sessionModules",{id})
       .then((response) => {
         r = response.data;
-        setStSessions(r);
+        setSessionsModules(r);
+        
      });
         
    // }
 
-    if(r != null){
-      setStSessions(r);
-      setSession(stSessions[0].session);
-    }
     //navigate("/");
   }
-  
   
   async function handleLogin(event: FormEvent) {
       event.preventDefault();
       await api.post( "aluno-login", { 
           email,
           password
-        }).then((response) => {setStudent(response.data);
+        }).then((response) => {
+          setStudent(response.data);
+          getStSession(response.data.id);
         }).catch((error) => {
           if(error.response.status == 401){
             alert("Password ou id errados");
@@ -128,10 +133,6 @@ export function LoginStudent() {
             console.log(error.response);
           }
         });
-      if(student) {
-        handleOpen(); 
-        getStSession();
-      }
       
   }
 
@@ -195,9 +196,11 @@ export function LoginStudent() {
         <Modal show={show} onHide={handleOpen} >
         <Modal.Body >
         <ListGroup numbered>
-          <ListGroup.Item ></ListGroup.Item>
-          <ListGroup.Item ></ListGroup.Item>
-          <ListGroup.Item></ListGroup.Item>
+          {sessionsModules.map((value,index) => {
+            return(
+              <ListGroup.Item>{value.module.content}</ListGroup.Item>
+            );
+          })}
         </ListGroup>
         </Modal.Body>
         </Modal>
