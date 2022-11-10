@@ -11,6 +11,7 @@ import { Module } from "./components/Module";
 import { LoginStudent } from "./components/LoginAluno";
 import { Course } from "./components/Course";
 import { Students } from "./components/Students";
+import { Report } from "./components/Report";
 
 export function App() {
   return (
@@ -24,6 +25,7 @@ export function App() {
             <Route path="/loginstudent" element={<LoginStudent />} />
             <Route path="/course" element={<Course />} />
             <Route path="/createstudent" element={<Students />} />
+            <Route path="/report" element={<Report />} />
           </Routes>
         </main>
       </div>

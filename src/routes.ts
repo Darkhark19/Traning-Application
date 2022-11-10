@@ -20,6 +20,7 @@ import { GetStudentsByCourseController } from "./controllers/GetStudentsByCourse
 import { CreateStudentController } from "./controllers/CreateStudentController";
 import { CreateCourseStudentController } from "./controllers/CreateCourseStudentController";
 import { GetSessionsModulesController } from "./controllers/GetSessionsModulesController";
+import { UpdateSessionController } from "./controllers/UpdateSessionController";
 const router = Router();
 
 router.post("/register", new RegisterController().handle);
@@ -33,6 +34,7 @@ router.post("/create-module", new CreateModuleController().handle);
 //router.post("/link-student-course", new CreateStudentSessioController().handle);
 router.post("/create-ssModules", new CreateSessionsModulesController().handle)
 router.post("/create-courseStudent", new CreateCourseStudentController().handle)
+router.put("/update-session", new UpdateSessionController().handle);
 
 router.post("/modules", new GetModulesController().handle);
 router.post("/id-from-token", new GetUserIdFromTokenController().handle);

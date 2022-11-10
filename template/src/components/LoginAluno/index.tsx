@@ -66,7 +66,6 @@ export function LoginStudent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [sessionsModules,setSessionsModules] = useState<SessionsModules[]>([]);
- 
 
 
   function goHome() {
@@ -105,17 +104,19 @@ export function LoginStudent() {
   }*/
     
   async function getStSession(id:String){
-    var r = null;
     await api.post<SessionsModules[]>("sessionModules",{id})
       .then((response) => {
-        r = response.data;
+        var r = response.data;
         setSessionsModules(r);
         
      });
-        
-   // }
+  }
 
-    //navigate("/");
+  async function handleLogout(event: FormEvent){
+    event.preventDefault();
+    var id = sessionsModules[0].sessionId;
+    await api.put("update-session",{id});
+    navigate("/");
   }
   
   async function handleLogin(event: FormEvent) {
@@ -135,8 +136,6 @@ export function LoginStudent() {
         });
       
   }
-
-
 
   return (  
       <div className={styles.formdiv}>
@@ -203,6 +202,11 @@ export function LoginStudent() {
           })}
         </ListGroup>
         </Modal.Body>
+        <Modal.Footer>
+        <Button type="button" variant="success" onClick={handleLogout}>
+              Logout
+          </Button>
+        </Modal.Footer>
         </Modal>
       </div>
   
