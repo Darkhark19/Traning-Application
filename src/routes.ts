@@ -23,6 +23,7 @@ import { GetSessionsModulesController } from "./controllers/GetSessionsModulesCo
 import { UpdateSessionController } from "./controllers/UpdateSessionController";
 import { GetCoursesUserController } from "./controllers/GetCoursesUserController";
 import { GetReportFromCourseController } from "./controllers/GetReportFromCourseController";
+import { GetStudentByUserController } from "./controllers/GetStudentByUserController";
 const router = Router();
 
 router.post("/register", new RegisterController().handle);
@@ -33,7 +34,6 @@ router.post("/create-student", new CreateStudentController().handle);
 router.post("/create-session", new CreateSessionController().handle);
 router.post("/create-course" , new CreateCourseController().handle);
 router.post("/create-module", new CreateModuleController().handle);
-//router.post("/link-student-course", new CreateStudentSessioController().handle);
 router.post("/create-ssModules", new CreateSessionsModulesController().handle)
 router.post("/create-courseStudent", new CreateCourseStudentController().handle)
 router.put("/update-session", new UpdateSessionController().handle);
@@ -45,6 +45,7 @@ router.post("/sessionModules", new GetSessionsModulesController().handle);
 router.post("/studentsCourse", new GetStudentsByCourseController().handle)
 router.post("/getCoursesOfUser", new GetCoursesUserController().handle);
 router.post("/getReportFromCourse", new GetReportFromCourseController().handle);
+router.post("/getStudentsByUser", new GetStudentByUserController().handle);
 
 router.get("/courses",new GetCoursesController().handle);
 router.get("/students",new GetStudentsController().handle);
