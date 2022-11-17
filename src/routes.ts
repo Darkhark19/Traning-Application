@@ -21,6 +21,8 @@ import { CreateStudentController } from "./controllers/CreateStudentController";
 import { CreateCourseStudentController } from "./controllers/CreateCourseStudentController";
 import { GetSessionsModulesController } from "./controllers/GetSessionsModulesController";
 import { UpdateSessionController } from "./controllers/UpdateSessionController";
+import { GetCoursesUserController } from "./controllers/GetCoursesUserController";
+import { GetReportFromCourseController } from "./controllers/GetReportFromCourseController";
 const router = Router();
 
 router.post("/register", new RegisterController().handle);
@@ -41,6 +43,8 @@ router.post("/id-from-token", new GetUserIdFromTokenController().handle);
 router.post("/users", new GetUserController().handle);
 router.post("/sessionModules", new GetSessionsModulesController().handle);
 router.post("/studentsCourse", new GetStudentsByCourseController().handle)
+router.post("/getCoursesOfUser", new GetCoursesUserController().handle);
+router.post("/getReportFromCourse", new GetReportFromCourseController().handle);
 
 router.get("/courses",new GetCoursesController().handle);
 router.get("/students",new GetStudentsController().handle);

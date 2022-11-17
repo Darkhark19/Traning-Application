@@ -72,6 +72,7 @@ export function Lobby() {
   const navigateToCourse = () => {navigate("/course")};
   const navigateToStudents = () => {navigate("/createstudent")};
   const navigateToLobby = () => {navigate("/lobby")};
+  const navigateToReport = () => {navigate("/report")};
   const [user, setUser] = useState("");
   const [firstRun, setFirstRun] = useState(true);
   const [subject, setSubject] = useState("");
@@ -136,7 +137,7 @@ export function Lobby() {
     setCheckedModules(newChecked);
   };
   
-  function getCourse() {
+  const getCourse = ()=>  {
     api
       .get<Course[]>("courses")
       .then((response) => {
@@ -219,10 +220,11 @@ export function Lobby() {
  
 
   if (firstRun) {
-    getCourse();
+    //getCourse();
     getStudents();
     setFirstRun(false);
   }
+  useEffect(getCourse,[])
 
   async function getId() {
     await api.post("id-from-token", {}).then((response) => {
@@ -360,31 +362,7 @@ export function Lobby() {
           <Navbar.Brand href="/">Página inicial</Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
 
-          <Form className="d-flex">
-            <FormControl
-              type="search"
-              placeholder="Pesquisar"
-              className="me-2"
-              aria-label="Search"
-              onSubmit={handleSearch}
-              onChange={(event) => setSubject(event.target.value)}
-              value={subject}
-            />
-            <Button
-              type="button"
-              variant="success"
-              className={styles.btn}
-              onClick={handleSearch}
-            >
-              Pesquisar
-            </Button>
-            <Button 
-             type = "button"
-             onClick={handleSelection}
-            >
-              Continuar
-            </Button>
-          </Form>
+          
         
         </Container>
       </Navbar>
@@ -462,6 +440,7 @@ export function Lobby() {
         </Offcanvas.Body>
       </Offcanvas>
       <div >
+      <Button variant="secondary"  onClick={navigateToReport}>Relatórios</Button>{' '}
         <Button variant="secondary"  onClick={handleStudentCreation}>Criar Alunos</Button>{' '}
         <Button variant="secondary" onClick={handleOpen} id="curso">Cursos</Button>{' '}
         <Button variant="secondary" id="modulos" hidden onClick={openModules}>Modulos</Button>{' '}
