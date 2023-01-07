@@ -1,24 +1,25 @@
 import styles from "./styles.module.scss";
-import Button from "react-bootstrap/button";
 import { api } from "../../services/api";
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Checkbox from '@mui/material/Checkbox';
-import List from '@mui/material/List';
-import { response } from "express";
+import { Button } from 'primereact/button';
+import { MultiSelect } from 'primereact/multiselect';
+import './styles.module.scss';
+import { Checkbox } from "primereact/checkbox";
+
+import "primereact/resources/themes/lara-light-indigo/theme.css";  //theme
+import "primereact/resources/primereact.min.css";                  //core css
+import "primeicons/primeicons.css";                                //icons
 
 type Course = {
-  id: String;
+  id: string;
   subject: string;
   name: string;
   ownerId: String;
 };
 
 type Student = {
-  id: String;
+  id: string;
   name: String;
   email: String;
   class: String;
@@ -32,21 +33,10 @@ export function Students() {
   const [firstRun, setFirstRun] = useState(true);
   const navigate = useNavigate();
   const navigateToLobby = () => {navigate("/lobby")};
-
   const [courses, setCourses] = useState<Course[]>([]);
-  const [checkedCourses, setCheckedCourse] = useState([]);
-  const [student, setStudent] = useState<Student>({id: '', name:"", email:"",class:""});
+  const [checkedCourses, setCheckedCourse] = useState<Course[]>([]);
 
-  const handleToggleCourses = (value: number) => () => {
-    const currentIndex = checkedCourses.indexOf(value);
-    const newChecked = [...checkedCourses];
-    if(currentIndex === -1 ){
-      newChecked.push(value);
-    } else{
-      newChecked.splice(currentIndex, 1);
-    }
-    setCheckedCourse(newChecked);
-  };
+ 
 
   function getCourse() {
     api
@@ -75,26 +65,55 @@ export function Students() {
    /* if (class !== passwordConfirmation) {
       alert("Passwords don't match");
     }*/
-     
     await api.post<Student>("create-student", { name, email, classNumber: turma })
       .catch((response) => console.log(response))
-      .then((response) => {
-        setStudent(response.data);
+      .then(function(response) {
         handleNewStudentCourse(response.data.id);
       });
     
   }
 
+  const CreateCourses = () => {
+    const handleToggleCourses = (e:{value: Course,checked:boolean}) => {
+      let _checkedCourses = [...checkedCourses];
+
+        if (e.checked) {
+            _checkedCourses.push(e.value);
+        }
+        else {
+            for (let i = 0; i < _checkedCourses.length; i++) {
+                const selectedCategory = _checkedCourses[i];
+
+                if (selectedCategory.id === e.value.id) {
+                    _checkedCourses.splice(i, 1);
+                    break;
+                }
+            }
+        }
+        setCheckedCourse(_checkedCourses);
+    }
+    const notEmpyt = <div className="card">
+        {courses.map((course, index) => {
+          return(<div key={index} className="field-checkbox">
+            <Checkbox inputId={course.id} name="course" value={course} onChange={handleToggleCourses} 
+            checked={checkedCourses.some((item) => item.id === course.id)} />
+            <label htmlFor={course.id}>{course.name}{' '}{course.id}</label>
+          </div>)})}
+        </div>
+    const empty = <div><h2>Não existe cursos</h2></div>
+    return courses.length == 0 ? empty : notEmpyt;
+  }
+
   async function handleNewStudentCourse(studentId: String) {
-    for(var index of checkedCourses){
-        var courseId = courses[index].id;
+    for(var course of checkedCourses){
+        var courseId = course.id;
         await api.post("create-courseStudent",{courseId,studentId});
       }
       navigateToLobby();
   }
-  
 
   return (
+    
     <div className={styles.background}>
       <div className={styles.formdiv}>
         <div>
@@ -137,42 +156,23 @@ export function Students() {
                 className={styles.input}
               />
             </div>
-            <fieldset>
-              <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-              {courses.map((value,index) => {
-                const labelId = "checkbox-list-label- { " + value.name + "}";
-                return(
-                  <ListItemButton role={undefined} onClick={handleToggleCourses(index)} dense>
-                    <ListItemIcon>
-                      <Checkbox edge="start" checked={checkedCourses.indexOf(index) !== -1}
-                        tabIndex={-1} disableRipple inputProps={{ 'aria-labelledby': labelId }} />
-                    </ListItemIcon>
-                    <ListItemText id={labelId} primary={ value.name} />
-                  </ListItemButton>);
-              })}
-            </List>
-          </fieldset>
-            <div className={styles.buttonGroup}>
-              <Button
-                type="button"
-                variant="secondary"
-                className={styles.buttonsubmit}
-                onClick={navigateToLobby}
-              >
-                Voltar
-              </Button>
-              <Button
-                type="submit"
-                variant="success"
-                className={styles.buttonsubmit}
-                onClick ={handleRegister}
-              >
-                Registar
-              </Button>
+            <br />
+            <div>
+            <CreateCourses/>
             </div>
-          </form>
-        </div>
-      </div>
-    </div>
+            <span className="p-buttonset">
+               <Button label= "Voltar"type="button" className="p-button-raised p-button-secondary" onClick={navigateToLobby}/>
+               <Button
+                 type="submit"
+                 className="p-button-raised"
+                 onClick ={handleRegister}
+               >
+                 Registar
+               </Button>
+             </span>
+           </form>
+         </div>
+       </div>
+     </div>
   );
 }

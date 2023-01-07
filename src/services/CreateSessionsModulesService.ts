@@ -16,7 +16,6 @@ class CreateSessionsModulesService {
       },
     });
     
-
     return session;
   }
 }

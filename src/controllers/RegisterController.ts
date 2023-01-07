@@ -21,7 +21,7 @@ class RegisterController {
 
       const result = await service.execute(name, email, password);
 
-      res.json({ success: `New user with email ${email} created!` });
+      res.json({ success: `New user with email ${email}  ${result.id} created!` });
     } catch (err) {
       res.status(500).json({ message: err.message });
     }

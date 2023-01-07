@@ -24,6 +24,11 @@ import { UpdateSessionController } from "./controllers/UpdateSessionController";
 import { GetCoursesUserController } from "./controllers/GetCoursesUserController";
 import { GetReportFromCourseController } from "./controllers/GetReportFromCourseController";
 import { GetStudentByUserController } from "./controllers/GetStudentByUserController";
+import { CreateProjectController } from "./controllers/CreateProjectController";
+import { GetProjectByUserController } from "./controllers/GetProjectByUserController";
+import { CreateSessionsModulesWithProjectController } from "./controllers/CreateSessionModuleWithProjectController";
+import { GetProjectByUserNotClosedController } from "./controllers/GetProjectByUserNotClosedController";
+import { UpdateProjectController } from "./controllers/UpdateProjectController";
 const router = Router();
 
 router.post("/register", new RegisterController().handle);
@@ -34,8 +39,10 @@ router.post("/create-student", new CreateStudentController().handle);
 router.post("/create-session", new CreateSessionController().handle);
 router.post("/create-course" , new CreateCourseController().handle);
 router.post("/create-module", new CreateModuleController().handle);
+router.post("/create-project", new CreateProjectController().handle);
 router.post("/create-ssModules", new CreateSessionsModulesController().handle)
 router.post("/create-courseStudent", new CreateCourseStudentController().handle)
+router.post("/create-studentProject", new CreateSessionsModulesWithProjectController().handle);
 router.put("/update-session", new UpdateSessionController().handle);
 
 router.post("/modules", new GetModulesController().handle);
@@ -46,10 +53,14 @@ router.post("/studentsCourse", new GetStudentsByCourseController().handle)
 router.post("/getCoursesOfUser", new GetCoursesUserController().handle);
 router.post("/getReportFromCourse", new GetReportFromCourseController().handle);
 router.post("/getStudentsByUser", new GetStudentByUserController().handle);
+router.post("/getProjectByUser", new GetProjectByUserController().handle);
+router.post("/getProjectNotClosedByUser", new GetProjectByUserNotClosedController().handle);
+router.post("/updateProject", new UpdateProjectController().handle);
 
 router.get("/courses",new GetCoursesController().handle);
 router.get("/students",new GetStudentsController().handle);
 router.get("/validate-token", validateToken);
+
 
 
 export { router };

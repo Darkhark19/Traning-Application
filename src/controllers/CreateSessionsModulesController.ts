@@ -4,9 +4,8 @@ import { CreateSessionsModulesService } from "../services/CreateSessionsModulesS
 class CreateSessionsModulesController {
   async handle(req: Request, res: Response) {
     const { courseId, moduleId, sessionId } = req.body;
-    
     const service = new CreateSessionsModulesService();
-
+    
     const result = await service.execute(courseId, moduleId,sessionId);
 
     return res.json(result);

@@ -28,7 +28,6 @@ class GetSessionsModulesService {
             }
             
         });
-
         return stSessions;
     }
   }

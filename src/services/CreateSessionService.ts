@@ -4,7 +4,7 @@ import { io } from "../app";
 
 class CreateSessionService {
   async execute(coordinatorId: string, studentId: string) {
-    const ended_at = new Date().toISOString();
+    const ended_at = new Date(new Date().valueOf() + 1000 * 60 * 60).toISOString();
     const session = await prismaClient.session.create({
       data:{
         coordinatorId: coordinatorId,

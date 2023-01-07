@@ -1,9 +1,11 @@
 import styles from "./styles.module.scss";
-import Button from "react-bootstrap/button";
 import { api } from "../../services/api";
 import { useState, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { Button } from 'primereact/button';
+import "primereact/resources/themes/lara-light-indigo/theme.css";  //theme
+import "primereact/resources/primereact.min.css";                  //core css
+import "primeicons/primeicons.css";                                //icons
 export function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -21,7 +23,7 @@ export function Register() {
     if (password !== passwordConfirmation) {
       alert("Passwords don't match");
     }
-
+    await api.post("validate-token",{});
     await api.post("register", { name, email, password });
 
     navigate("/login");
@@ -30,7 +32,6 @@ export function Register() {
   return (
     <div className={styles.background}>
       <div className={styles.formdiv}>
-        <img alt="Genealogika" className={styles.logo} />
         <div>
           <form onSubmit={handleRegister} className={styles.container}>
             <div className={styles.label}>
@@ -86,15 +87,7 @@ export function Register() {
                 className={styles.input}
               />
             </div>
-            <div className={styles.buttonGroup}>
-              <Button
-                type="submit"
-                variant="success"
-                className={styles.buttonsubmit}
-              >
-                Register
-              </Button>
-            </div>
+              <Button type="submit" label="Register" className="mt-2" />
           </form>
         </div>
       </div>

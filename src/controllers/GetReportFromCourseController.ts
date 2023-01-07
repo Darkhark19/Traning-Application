@@ -7,7 +7,7 @@ class GetReportFromCourseController{
     const service = new GetReportFromCourseService();
     const result = await service.execute(courses);
     if(result.length ==0){
-        alert("Não existe entradas")
+        alert("Não existe entradas");
     }
     return res.json(result);
   }

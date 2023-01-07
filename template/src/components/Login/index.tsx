@@ -1,10 +1,11 @@
 import styles from "./styles.module.scss";
-import logo from "../../assets/Genealogika_logo.png";
-import {Button ,ButtonGroup} from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useState, FormEvent } from "react";
 import { api } from "../../services/api";
-
+import { Button } from 'primereact/button';
+import "primereact/resources/themes/lara-light-indigo/theme.css";  //theme
+import "primereact/resources/primereact.min.css";                  //core css
+import "primeicons/primeicons.css";                                //icons
 export function Login() {
   const navigate = useNavigate();
 
@@ -16,6 +17,7 @@ export function Login() {
   }
   async function handleLogin(event: FormEvent) {
     event.preventDefault();
+    
     const response = await api.post(
       "login",  
       {
@@ -68,25 +70,10 @@ export function Login() {
                 className={styles.input}
               />
             </div>
-            <ButtonGroup className="me-2" aria-label="First group">
-              <Button
-                variant="secondary"
-                type="button"
-                className = {styles.btnHome}
-                onClick={goHome}
-              >
-                Página Principal
-              </Button>
-              <Button
-                type="submit"
-                variant="success"
-                className={styles.buttonsubmit}
-                onClick = {handleLogin}
-              >
-                Login
-              </Button>
-              
-            </ButtonGroup>
+            <div >
+            <Button label="Página Principal"  className="p-button-secondary"  onClick={goHome}/>
+            <Button label="Login" type="submit"/>
+            </div>
           </form>
         </div>
       </div>

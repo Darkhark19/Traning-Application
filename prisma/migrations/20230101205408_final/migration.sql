@@ -68,10 +68,25 @@ CREATE TABLE "ssModules" (
     "sessionId" TEXT NOT NULL,
     "moduleId" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
+    "projectId" TEXT,
 
     PRIMARY KEY ("moduleId", "sessionId", "courseId"),
     CONSTRAINT "ssModules_courseId_moduleId_fkey" FOREIGN KEY ("courseId", "moduleId") REFERENCES "modules" ("courseId", "id") ON DELETE RESTRICT ON UPDATE CASCADE,
-    CONSTRAINT "ssModules_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "sessions" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+    CONSTRAINT "ssModules_sessionId_fkey" FOREIGN KEY ("sessionId") REFERENCES "sessions" ("id") ON DELETE RESTRICT ON UPDATE CASCADE,
+    CONSTRAINT "ssModules_projectId_fkey" FOREIGN KEY ("projectId") REFERENCES "projects" ("id") ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+-- CreateTable
+CREATE TABLE "projects" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "name" TEXT NOT NULL,
+    "closed" BOOLEAN NOT NULL DEFAULT false,
+    "content" TEXT NOT NULL,
+    "consumables" TEXT NOT NULL DEFAULT '',
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    "ownerId" TEXT NOT NULL,
+    CONSTRAINT "projects_ownerId_fkey" FOREIGN KEY ("ownerId") REFERENCES "users" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
 -- CreateIndex

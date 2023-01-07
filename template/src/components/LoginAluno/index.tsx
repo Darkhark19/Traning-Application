@@ -1,11 +1,15 @@
-import { Button, ButtonGroup } from "react-bootstrap";
 import { api } from "../../services/api";
 import styles from "./styles.module.scss";
-import logo from "../../assets/dnaanalysis.png";
 import { useNavigate } from "react-router-dom";
 import { useState ,FormEvent} from "react";
-import { Modal,ListGroup } from "react-bootstrap";
-
+import { VirtualScroller } from 'primereact/virtualscroller';
+import { classNames } from 'primereact/utils';
+import { Button } from 'primereact/button';
+import { Dialog } from 'primereact/dialog';
+import "primereact/resources/themes/lara-light-indigo/theme.css";  //theme
+import "primereact/resources/primereact.min.css";                  //core css
+import "primeicons/primeicons.css";    
+import { ListBox } from 'primereact/listbox';                            //icons
 type Course = {
   id: string;
   name: string;
@@ -35,7 +39,7 @@ type Session ={
 
 type Module = {
   id: String;
-  content: String;
+  content: string;
   courseId: String;
 }
 
@@ -59,64 +63,39 @@ export function LoginStudent() {
 
   const [student, setStudent] = useState<Student>();
  
-  const [temas, setTemas] = useState([]);
   const [show, setShow] = useState(false);
   const handleOpen = () => setShow(true);
   const handleClose = () => setShow(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [sessionsModules,setSessionsModules] = useState<SessionsModules[]>([]);
-
-
+  const [tableModules, setTableModules] = useState([]);
   function goHome() {
     navigate("/");
   }
-  
-/*
-  const subject = "DNA Analysis";
 
-  
-
-  async function handleDnaAnalysis(event: FormEvent) {
-    event.preventDefault();
-
-    let response = await api.post("id-from-token", {});
-
-    response = await api.post<User>("users", { user: response.data });
-    console.log(response.data);
-    const email = response.data.email;
-    const body = `Hello ${response.data.name},\n We have received your order!In a few days you will receive a package in your home with everything you need to find yourself\n Hope you enjoy it!\n\n\n Best Regards,\n Genealogika`;
-
-    await api.post("email", {
-      receiverEmail: email,
-      subject,
-      body,
-    });
-  }
-  async function getId() {
-    await api.post("id-from-token", {}).then((response) => {
-      const r = response.data;
-      console.log(r);
-      setStudentId(r);
-      console.log(studentId);
-      //nao funciona
-    });
-  }*/
     
   async function getStSession(id:String){
     await api.post<SessionsModules[]>("sessionModules",{id})
       .then((response) => {
         var r = response.data;
         setSessionsModules(r);
-        
+        var modules = [];
+        r.forEach((element) => {
+          modules.push(element.module.content);
+        });
+        setTableModules(modules);
      });
   }
 
   async function handleLogout(event: FormEvent){
     event.preventDefault();
-    var id = sessionsModules[0].sessionId;
-    await api.put("update-session",{id});
-    navigate("/");
+    if(sessionsModules.length != 0){
+      var id = sessionsModules[0].sessionId;
+      await api.put("update-session",{id});
+    }
+    navigate("/Loginstudent");
+    handleClose();
   }
   
   async function handleLogin(event: FormEvent) {
@@ -127,6 +106,7 @@ export function LoginStudent() {
         }).then((response) => {
           setStudent(response.data);
           getStSession(response.data.id);
+          handleOpen();
         }).catch((error) => {
           if(error.response.status == 401){
             alert("Password ou id errados");
@@ -136,7 +116,11 @@ export function LoginStudent() {
         });
       
   }
-
+  const footer = (
+    <div>
+        <Button label="LogOut" icon="pi pi-times" onClick={handleLogout} />
+    </div>
+);
   return (  
       <div className={styles.formdiv}>
       <div>
@@ -170,44 +154,14 @@ export function LoginStudent() {
                 className={styles.input}
               />
             </div>
-            <ButtonGroup className="me-2" aria-label="First group">
-              <Button
-                variant="secondary"
-                type="button"
-                className={styles.btnHome}
-                onClick={goHome}
-                
-              >
-                Página Principal
-              </Button>
-              <Button
-                type="submit"
-                variant="success"
-                className={styles.btnHome}
-                
-              >
-                Login
-              </Button>
-              
-            </ButtonGroup>
+            <Button label="Página Principal" className="p-button-secondary"  onClick={goHome}/>
+            <Button label="Login" type="submit"/>
+
           </form>
         </div>
-        <Modal show={show} onHide={handleOpen} >
-        <Modal.Body >
-        <ListGroup numbered>
-          {sessionsModules.map((value,index) => {
-            return(
-              <ListGroup.Item>{value.module.content}</ListGroup.Item>
-            );
-          })}
-        </ListGroup>
-        </Modal.Body>
-        <Modal.Footer>
-        <Button type="button" variant="success" onClick={handleLogout}>
-              Logout
-          </Button>
-        </Modal.Footer>
-        </Modal>
+        <Dialog header="Modulos" visible={show} footer={footer} style={{ width: '50vw' }} modal onHide={handleClose}>
+          <ListBox options={tableModules} virtualScrollerOptions={{ itemSize: 38 }} style={{ width: '15rem' }} listStyle={{ height: '250px' }}/>
+        </Dialog>
       </div>
   
   );

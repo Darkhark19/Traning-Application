@@ -25,6 +25,7 @@ model User {
 
   courses  Course[]
   sessions Session[]
+  Project  Project[]
   @@map("users")
 }
 
@@ -81,7 +82,7 @@ model Module {
 model Session {
   id            String            @id @default(uuid())
   created_at    DateTime          @default(now())
-  ended_at      DateTime          
+  ended_at      DateTime
   coordinator   User              @relation(fields: [coordinatorId], references: [id])
   coordinatorId String
   students      Student           @relation(fields: [studentId], references: [id])
@@ -93,12 +94,30 @@ model Session {
 
 model SessionsModules {
 
-  session   Session @relation(fields: [sessionId], references: [id])
+  session   Session  @relation(fields: [sessionId], references: [id])
   sessionId String
-  module    Module  @relation(fields: [courseId, moduleId], references: [courseId, id])
+  module    Module   @relation(fields: [courseId, moduleId], references: [courseId, id])
   moduleId  String
   courseId  String
+  project   Project? @relation(fields: [projectId], references: [id])
+  projectId String?
 
   @@id([moduleId, sessionId, courseId], name: "idSsModule")
   @@map("ssModules")
+}
+
+model Project {
+  id          String   @id @default(uuid())
+  name        String
+  closed      Boolean  @default(false)
+  content     String
+  consumables String   @default("")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  owner       User     @relation(fields: [ownerId], references: [id])
+  ownerId     String
+
+
+  SessionsModules SessionsModules[]
+  @@map("projects")
 }

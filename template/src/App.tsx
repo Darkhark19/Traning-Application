@@ -6,12 +6,12 @@ import { Login } from "./components/Login";
 import { Register } from "./components/Register";
 import { Home } from "./components/Home";
 import { Lobby } from "./components/Lobby";
-import { TreeHome } from "./components/Tree";
 import { Module } from "./components/Module";
 import { LoginStudent } from "./components/LoginAluno";
 import { Course } from "./components/Course";
 import { Students } from "./components/Students";
 import { Report } from "./components/Report";
+import { Project } from "./components/Project";
 
 export function App() {
   return (
@@ -26,6 +26,7 @@ export function App() {
             <Route path="/course" element={<Course />} />
             <Route path="/createstudent" element={<Students />} />
             <Route path="/report" element={<Report />} />
+            <Route path="/project" element={<Project />} />
           </Routes>
         </main>
       </div>

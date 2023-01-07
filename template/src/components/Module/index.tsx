@@ -1,9 +1,13 @@
 import { api } from "../../services/api";
-import { Button, Form, SSRProvider } from "react-bootstrap";
 import styles from "./styles.module.scss";
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { Button } from 'primereact/button';
+import { InputText } from 'primereact/inputtext';
+import { InputTextarea } from 'primereact/inputtextarea';
+import "primereact/resources/themes/lara-light-indigo/theme.css";  //theme
+import "primereact/resources/primereact.min.css";                  //core css
+import "primeicons/primeicons.css";                                //icons
 type User = {
   id: string;
   name: string;
@@ -28,58 +32,34 @@ export function Module() {
 
   async function handleNewCourse(event: FormEvent) {
     event.preventDefault();
-
-    
     let response = await api.post("id-from-token", {});
     var id = response.data;
+    await api.post("validate-token",{});
     response = await api.post<User>("users",{id});
     setUser(response.data);
-    
     await api.post("create-course",{title, subject, user} ).catch((response) => console.log(response));
     navigateTemas();
   }
 
   return (
     <div className={styles.wrapper}>
-      <Form>
-        <Form.Group className={styles.formInput} controlId="formBasicFavColor">
-          <Form.Label>Criar curso</Form.Label>
-          <Form.Control
-            as="textarea"
-            placeholder="Title"
-            onChange={(event) => setTitle(event.target.value)}
-            value={title}
-          />
-          <Form.Control
-            as="textarea"
-            placeholder="Subject"
-            onChange={(event) => setSubject(event.target.value)}
-            value={subject}
-          />
-          {
-            //<Form.Text className="text-muted">
-            //We'll never share your email with anyone else.
-            //</Form.Text>
-          }
-        </Form.Group>
-
-        <Button
-          variant="primary"
-          type="submit"
-          className={styles.formButton}
-          onClick={handleNewCourse}
-        >
-          Submit
-        </Button>
-        <Button
-          variant="secondary"
-          type="button"
-          onClick={navigateTemas}
-          className={styles.formButton}
-        >
-          Close
-        </Button>
-      </Form>
+      <h1>Novo Modulo</h1>
+      <div className="p-fluid grid">
+        <div className="field col-12 md:col-4">
+          <span className="p-float-label">
+            <InputText id="inputtext" value={title} onChange={(e) => setTitle(e.target.value)} />
+              <label htmlFor="inputtext">Titulo</label>
+          </span>
+        </div>
+        <div className="field col-12 md:col-4">
+          <span className="p-float-label">
+          <InputTextarea id="textarea" value={subject} onChange={(e) => setSubject(e.target.value)} rows={3} />
+              <label htmlFor="textarea">Descripção</label>
+            </span>
+        </div>
+      </div>
+      <Button label="Submit" icon="pi pi-check" onClick={handleNewCourse}/>
+      <Button className="p-button-secondary" label="Close" icon="pi pi-times" onClick={navigateTemas}/>
     </div>
   );
 }
