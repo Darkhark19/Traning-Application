@@ -1,5 +1,5 @@
 # Traning-Application
-
+Application simulating a management center of resources 
 ## A instalar:
 
 - Intalar o node
@@ -14,7 +14,7 @@
 
 ### Correr o Frontend
 
-- $cd genealogika-template
+- $cd template
 - $yarn install
 - $yarn dev
 
